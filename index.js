@@ -38,7 +38,9 @@ app.use('/api/attendance', attendanceRouter)
 
 app.use('/public/uploads', express.static('public/uploads'))
 
-
+app.get("/", (req, res) => {
+  res.send("✅ Employee API backend running successfully!");
+});
 
 connectToDatabase()
 
