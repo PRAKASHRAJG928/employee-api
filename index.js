@@ -39,6 +39,11 @@ app.use(express.json());
 // ✅ Connect to MongoDB
 await connectToDatabase();
 
+// Add health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
 // ✅ Static files (if needed)
 app.use("/public/uploads", express.static(path.join(__dirname, "public/uploads")));
 
