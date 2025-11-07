@@ -104,10 +104,6 @@ const getEmployees = async (req, res) => {
 
 
 
-
-
-
-
 const updateEmployee = async (req, res) => {
     try {
         const { id } = req.params
