@@ -9,10 +9,10 @@ const connectToDatabase = async () => {
       serverSelectionTimeoutMS: 5000,
     });
     console.log("✅ Connected to MongoDB");
-  } catch (error) {
+} catch (error) {
     console.error("❌ MongoDB connection error:", error.message);
-    process.exit(1);
-  }
+    // Note: In serverless environment, do not exit process
+}
 };
 
 export default connectToDatabase;
