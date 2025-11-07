@@ -27,6 +27,16 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error('Error:', err);
+  res.status(500).json({ 
+    error: 'Internal Server Error',
+    message: err.message,
+    stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+  });
+});
+
 // ✅ Middleware
 app.use(
   cors({
@@ -38,8 +48,26 @@ app.use(
 );
 app.use(express.json());
 
-// ✅ Connect to MongoDB
-await connectToDatabase();
+// Health check endpoint
+app.get('/', async (req, res) => {
+  try {
+    const dbStatus = await connectToDatabase();
+    res.json({ 
+      status: 'ok',
+      message: '✅ Employee API backend running successfully!',
+      dbConnection: dbStatus ? 'connected' : 'disconnected',
+      env: process.env.NODE_ENV,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Health check error:', error);
+    res.status(500).json({ 
+      status: 'error',
+      message: 'Backend error',
+      error: error.message
+    });
+  }
+});
 
 // Add health check endpoint
 app.get('/api/health', (req, res) => {
