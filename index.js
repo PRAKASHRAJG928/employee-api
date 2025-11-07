@@ -30,8 +30,10 @@ const app = express();
 // ✅ Middleware
 app.use(
   cors({
-    origin: "https://employeefrontend-mu.vercel.app", // frontend URL (no trailing slash)
+    origin: ["https://employeefrontend-mu.vercel.app", "http://localhost:5173"],
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
   })
 );
 app.use(express.json());
