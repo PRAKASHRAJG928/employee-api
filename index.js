@@ -51,12 +51,19 @@ app.use(express.json());
 // Health check endpoint
 app.get('/', async (req, res) => {
   try {
+    console.log('Health check requested');
+    console.log('Environment:', {
+      NODE_ENV: process.env.NODE_ENV,
+      MONGODB_URI: process.env.MONGODB_URI ? 'Set' : 'Not set',
+      JWT_SECRET: process.env.JWT_SECRET ? 'Set' : 'Not set'
+    });
+    
     const dbStatus = await connectToDatabase();
     res.json({ 
       status: 'ok',
       message: '✅ Employee API backend running successfully!',
       dbConnection: dbStatus ? 'connected' : 'disconnected',
-      env: process.env.NODE_ENV,
+      env: process.env.NODE_ENV || 'not set',
       timestamp: new Date().toISOString()
     });
   } catch (error) {
@@ -64,7 +71,8 @@ app.get('/', async (req, res) => {
     res.status(500).json({ 
       status: 'error',
       message: 'Backend error',
-      error: error.message
+      error: error.message,
+      timestamp: new Date().toISOString()
     });
   }
 });
